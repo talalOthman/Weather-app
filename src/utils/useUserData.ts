@@ -5,8 +5,11 @@ type UserData = {
     lat: number;
     long: number;
   };
-  date : string;
-  status : boolean;
+  date: {
+    current: string;
+    lastWeek: string;
+  };
+  status: boolean;
 };
 
 export const useUserData = () => {
@@ -15,20 +18,32 @@ export const useUserData = () => {
       lat: 0,
       long: 0,
     },
-    date : "",
-    status : true
+    date: {
+      current: "",
+      lastWeek: "",
+    },
+    status: true,
   });
 
   useEffect(() => {
     const current = new Date();
+    const lastWeek = new Date();
+    lastWeek.setDate(lastWeek.getDate() - 7);
     navigator.geolocation.getCurrentPosition((position) => {
       setUserData({
         geolocation: {
           lat: position.coords.latitude,
           long: position.coords.longitude,
         },
-        date : `${current.getFullYear()}-${current.getMonth()+1}-${current.getDate()}`,
-        status: false
+        date: {
+          current: `${current.getFullYear()}-${
+            current.getMonth() + 1
+          }-${current.getDate()}`,
+          lastWeek: `${lastWeek.getFullYear()}-${
+            lastWeek.getMonth() + 1
+          }-${lastWeek.getDate()}`,
+        },
+        status: false,
       });
     });
   }, []);
