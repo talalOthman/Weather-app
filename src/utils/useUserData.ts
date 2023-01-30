@@ -28,7 +28,7 @@ export const useUserData = () => {
   useEffect(() => {
     const current = new Date();
     const lastWeek = new Date();
-    lastWeek.setDate(lastWeek.getDate() - 7);
+    lastWeek.setDate(lastWeek.getDate() - 6);
     navigator.geolocation.getCurrentPosition((position) => {
       setUserData({
         geolocation: {

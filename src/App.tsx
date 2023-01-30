@@ -10,12 +10,12 @@ import {
 } from "@chakra-ui/react";
 import { ColorModeSwitcher } from "./ColorModeSwitcher";
 import { Logo } from "./Logo";
-import { instance, URL } from "./api/instance";
 import { useFutureWeatherData } from "./utils/useFutureWeatherData";
+import { usePastWeatherData } from "./utils/usePastWeatherData";
 
 export const App = () => {
   const { location, futureWeather, currentWeather } = useFutureWeatherData();
-
+  const pastWeather = usePastWeatherData();
 
   return (
     <ChakraProvider theme={theme}>
