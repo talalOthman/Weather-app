@@ -46,7 +46,7 @@ export const usePastWeatherData = () => {
   useEffect(() => {
     if (!userData.status) {
       instance
-        .get(`${URL}/history.jso`, {
+        .get(`${URL}/history.json`, {
           params: {
             q: `${userData.geolocation.lat},${userData.geolocation.long}`,
             dt: userData.date.lastWeek,
