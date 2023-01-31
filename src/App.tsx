@@ -8,15 +8,26 @@ import {
   Spinner,
   Image,
 } from "@chakra-ui/react";
+import { useState, useEffect } from "react";
 import { ColorModeSwitcher } from "./ColorModeSwitcher";
 import { Logo } from "./Logo";
 import { useFutureWeatherData } from "./utils/useFutureWeatherData";
 import { usePastWeatherData } from "./utils/usePastWeatherData";
+import { ForecastData } from "./types/ForecastData";
 
 export const App = () => {
-  const { location, futureWeather, currentWeather } = useFutureWeatherData();
-  const pastWeather = usePastWeatherData();
+  const { location, currentWeather, futureWeather, isFutureSet } =
+    useFutureWeatherData();
+  const { pastWeather, isPastSet } = usePastWeatherData();
+  // const [forecastWeek, setForecastWeek] = useState<ForecastData[]>([]);
 
+  useEffect(() => {
+    if (isFutureSet && isPastSet) {
+      console.log(pastWeather);
+      console.log(futureWeather);
+      console.log(currentWeather);
+    }
+  }, [isFutureSet, isPastSet]);
   return (
     <ChakraProvider theme={theme}>
       <Box textAlign="center" fontSize="xl">
@@ -25,7 +36,6 @@ export const App = () => {
           <VStack spacing={8}>
             <Logo h="40vmin" pointerEvents="none" />
             <Text>{location?.country}</Text>
-            <Text>{currentWeather?.temp.tempC}</Text>
           </VStack>
         </Grid>
       </Box>

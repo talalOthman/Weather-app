@@ -1,57 +1,14 @@
 import { useEffect, useState } from "react";
-import { WeatherData } from "../types/WeatherData";
 import { LocationData } from "../types/LocationData";
 import { instance, URL } from "../api/instance";
 import { useUserData } from "./useUserData";
-
-type FutureForcast = {
-  maxTemp: {
-    maxTempC: number;
-    maxTempF: number;
-  };
-  minTemp: {
-    minTempC: number;
-    minTempF: number;
-  };
-  avgTemp: {
-    avgTempC: number;
-    avgTempF: number;
-  };
-  maxWind: {
-    maxWindMPH: number;
-    maxWindKPH: number;
-  };
-  totalPrecip: {
-    totalPrecipMM: number;
-    totalPrecipIN: number;
-  };
-  totalSnowCM: number;
-  avgVis: {
-    avgVisKM: number;
-    avgVisMILES: number;
-  };
-  avgHumidity: number;
-  dailyRain: {
-    dailyWillItRain: boolean;
-    dailyChanceOfRain: number;
-  };
-  dailySnow: {
-    dailyWillItSnow: boolean;
-    dailyChanceOfSnow: number;
-  };
-  condition: {
-    text: string;
-    icon: string;
-    code: number;
-  };
-  uv: number;
-  hour: WeatherData[] | null;
-};
+import { ForecastData } from "../types/ForecastData";
 
 export const useFutureWeatherData = () => {
   const [location, setLocation] = useState<LocationData>();
-  const [futureWeather, setFutureWeather] = useState<FutureForcast[]>([]);
-  const [currentWeather, setCurrentWeather] = useState<WeatherData>();
+  const [futureWeather, setFutureWeather] = useState<ForecastData[]>([]);
+  const [currentWeather, setCurrentWeather] = useState<ForecastData>();
+  const [isFutureSet, setIsFutureSet] = useState<boolean>(false)
   const userData = useUserData();
 
   useEffect(() => {
@@ -80,82 +37,83 @@ export const useFutureWeatherData = () => {
                 minTempC: day.day.mintemp_c,
                 minTempF: day.day.mintemp_f,
               },
-              avgTemp: {
-                avgTempC: day.day.avgtemp_c,
-                avgTempF: day.day.avgtemp_f,
+              temp: {
+                tempC: day.day.avgtemp_c,
+                tempF: day.day.avgtemp_f,
               },
-              maxWind: {
-                maxWindMPH: day.day.maxwind_mph,
-                maxWindKPH: day.day.maxwind_kph,
+              wind: {
+                windMPH: day.day.maxwind_mph,
+                windKPH: day.day.maxwind_kph,
               },
-              totalPrecip: {
-                totalPrecipMM: day.day.totalprecip_mm,
-                totalPrecipIN: day.day.totalprecip_in,
-              },
-              totalSnowCM: day.day.totalsnow_cm,
-              avgVis: {
-                avgVisKM: day.day.avgvis_km,
-                avgVisMILES: day.day.avgvis_miles,
-              },
-              avgHumidity: day.day.avghumidity,
-              dailyRain: {
-                dailyWillItRain: day.day.daily_will_it_rain,
-                dailyChanceOfRain: day.day.daily_chance_of_rain,
-              },
-              dailySnow: {
-                dailyWillItSnow: day.day.daily_will_it_snow,
-                dailyChanceOfSnow: day.day.daily_chance_of_snow,
-              },
-              condition: {
-                text: day.day.condition.text,
-                icon: day.day.condition.icon,
-                code: day.day.condition.code,
-              },
+              humidity: day.day.avghumidity,
+              rainPercentage: day.hour[12].chance_of_rain,
+              condition: day.day.condition.text,
               uv: day.day.uv,
+              morningTemp: {
+                morningTempC: day.hour[6].temp_c,
+                morningTempF: day.hour[6].temp_f,
+              },
+              afternoonTemp: {
+                afternoonTempC: day.hour[12].temp_c,
+                afternoonTempF: day.hour[12].temp_f,
+              },
+              eveningTemp: {
+                eveningTempC: day.hour[17].temp_c,
+                eveningTempF: day.hour[17].temp_f,
+              },
+              nightTemp: {
+                nightTempC: day.hour[21].temp_c,
+                nightTempF: day.hour[21].temp_f,
+              },
             };
           });
           setFutureWeather(updatedFutureWeather);
           setCurrentWeather({
+            maxTemp: {
+              maxTempC: response.data.forecast.forecastday[0].day.maxtemp_c,
+              maxTempF: response.data.forecast.forecastday[0].day.maxtemp_f,
+            },
+            minTemp: {
+              minTempC: response.data.forecast.forecastday[0].day.mintemp_c,
+              minTempF: response.data.forecast.forecastday[0].day.mintemp_f,
+            },
             temp: {
               tempC: response.data.current.temp_c,
               tempF: response.data.current.temp_f,
             },
-            isDay: response.data.current.is_day,
             wind: {
               windMPH: response.data.current.wind_mph,
               windKPH: response.data.current.wind_kph,
-              windDegree: response.data.current.wind_degree,
-              windDirection: response.data.current.wind_dir,
-            },
-            condition: {
-              text: response.data.current.condition.text,
-              icon: response.data.current.condition.icon,
-              code: response.data.current.condition.code,
-            },
-            pressure: {
-              pressureMB: response.data.current.pressure_mb,
-              pressureIN: response.data.current.pressure_in,
-            },
-            precip: {
-              precipMM: response.data.current.precip_mm,
-              precipIN: response.data.current.precip_in,
             },
             humidity: response.data.current.humidity,
-            cloud: response.data.current.cloud,
-            feelsLike: {
-              feelsLikeC: response.data.current.feelslike_c,
-              feelsLikeF: response.data.current.feelslike_f,
-            },
-            vis: {
-              visKM: response.data.current.vis_km,
-              visMILES: response.data.current.vis_miles,
-            },
+            rainPercentage:
+              response.data.forecast.forecastday[0].hour[12].chance_of_rain,
+            condition: response.data.current.condition.text,
             uv: response.data.current.uv,
-            gust: {
-              gustMPH: response.data.current.gust_mph,
-              gustKPH: response.data.current.gust_kph,
+            morningTemp: {
+              morningTempC:
+                response.data.forecast.forecastday[0].hour[6].temp_c,
+              morningTempF:
+                response.data.forecast.forecastday[0].hour[6].temp_f,
+            },
+            afternoonTemp: {
+              afternoonTempC:
+                response.data.forecast.forecastday[0].hour[12].temp_c,
+              afternoonTempF:
+                response.data.forecast.forecastday[0].hour[12].temp_f,
+            },
+            eveningTemp: {
+              eveningTempC:
+                response.data.forecast.forecastday[0].hour[17].temp_c,
+              eveningTempF:
+                response.data.forecast.forecastday[0].hour[17].temp_f,
+            },
+            nightTemp: {
+              nightTempC: response.data.forecast.forecastday[0].hour[21].temp_c,
+              nightTempF: response.data.forecast.forecastday[0].hour[21].temp_f,
             },
           });
+          setIsFutureSet(true)
         })
         .catch((error) => {
           console.log(error);
@@ -163,5 +121,5 @@ export const useFutureWeatherData = () => {
     }
   }, [userData.status]);
 
-  return { location, futureWeather, currentWeather };
+  return { location, currentWeather, futureWeather, isFutureSet};
 };

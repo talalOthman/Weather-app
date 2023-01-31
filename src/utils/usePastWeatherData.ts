@@ -1,46 +1,11 @@
 import { useEffect, useState } from "react";
-import { WeatherData } from "../types/WeatherData";
 import { instance, URL } from "../api/instance";
 import { useUserData } from "./useUserData";
-
-type PastForcast = {
-  maxTemp: {
-    maxTempC: number;
-    maxTempF: number;
-  };
-  minTemp: {
-    minTempC: number;
-    minTempF: number;
-  };
-  avgTemp: {
-    avgTempC: number;
-    avgTempF: number;
-  };
-  maxWind: {
-    maxWindMPH: number;
-    maxWindKPH: number;
-  };
-  totalPrecip: {
-    totalPrecipMM: number;
-    totalPrecipIN: number;
-  };
-  totalSnowCM: number;
-  avgVis: {
-    avgVisKM: number;
-    avgVisMILES: number;
-  };
-  avgHumidity: number;
-  condition: {
-    text: string;
-    icon: string;
-    code: number;
-  };
-  uv: number;
-  hour: WeatherData[] | null;
-};
+import { ForecastData } from "../types/ForecastData";
 
 export const usePastWeatherData = () => {
-  const [pastWeather, setPastWeather] = useState<PastForcast[]>([]);
+  const [pastWeather, setPastWeather] = useState<ForecastData[]>([]);
+  const [isPastSet, setIsPastSet] = useState<boolean>(false)
   const userData = useUserData();
 
   useEffect(() => {
@@ -50,7 +15,7 @@ export const usePastWeatherData = () => {
           params: {
             q: `${userData.geolocation.lat},${userData.geolocation.long}`,
             dt: userData.date.lastWeek,
-            end_dt: userData.date.current
+            end_dt: userData.date.current,
           },
         })
         .then((response) => {
@@ -65,34 +30,38 @@ export const usePastWeatherData = () => {
                 minTempC: day.day.mintemp_c,
                 minTempF: day.day.mintemp_f,
               },
-              avgTemp: {
-                avgTempC: day.day.avgtemp_c,
-                avgTempF: day.day.avgtemp_f,
+              temp: {
+                tempC: day.day.avgtemp_c,
+                tempF: day.day.avgtemp_f,
               },
-              maxWind: {
-                maxWindMPH: day.day.maxwind_mph,
-                maxWindKPH: day.day.maxwind_kph,
+              wind: {
+                windMPH: day.day.maxwind_mph,
+                windKPH: day.day.maxwind_kph,
               },
-              totalPrecip: {
-                totalPrecipMM: day.day.totalprecip_mm,
-                totalPrecipIN: day.day.totalprecip_in,
-              },
-              totalSnowCM: day.day.totalsnow_cm,
-              avgVis: {
-                avgVisKM: day.day.avgvis_km,
-                avgVisMILES: day.day.avgvis_miles,
-              },
-              avgHumidity: day.day.avghumidity,
-              condition: {
-                text: day.day.condition.text,
-                icon: day.day.condition.icon,
-                code: day.day.condition.code,
-              },
+              humidity: day.day.avghumidity,
+              rainPercentage: day.hour[12].chance_of_rain,
+              condition: day.day.condition.text,
               uv: day.day.uv,
+              morningTemp: {
+                morningTempC: day.hour[6].temp_c,
+                morningTempF: day.hour[6].temp_f,
+              },
+              afternoonTemp: {
+                afternoonTempC: day.hour[12].temp_c,
+                afternoonTempF: day.hour[12].temp_f,
+              },
+              eveningTemp: {
+                eveningTempC: day.hour[17].temp_c,
+                eveningTempF: day.hour[17].temp_f,
+              },
+              nightTemp: {
+                nightTempC: day.hour[21].temp_c,
+                nightTempF: day.hour[21].temp_f,
+              },
             };
           });
           setPastWeather(updatedPastWeather);
-          
+          setIsPastSet(true)
         })
         .catch((error) => {
           console.log(error);
@@ -100,5 +69,5 @@ export const usePastWeatherData = () => {
     }
   }, [userData.status]);
 
-  return pastWeather;
+  return {pastWeather, isPastSet};
 };
