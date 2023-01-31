@@ -6,7 +6,10 @@ type UserData = {
     long: number;
   };
   date: {
-    current: string;
+    current: {
+      currentNumeric: string,
+      currentDisplay: string
+    },
     lastWeek: string;
   };
   status: boolean;
@@ -19,7 +22,10 @@ export const useUserData = () => {
       long: 0,
     },
     date: {
-      current: "",
+      current: {
+        currentNumeric: "",
+        currentDisplay: ""
+      },
       lastWeek: "",
     },
     status: true,
@@ -27,6 +33,10 @@ export const useUserData = () => {
 
   useEffect(() => {
     const current = new Date();
+    const options = { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' };
+    
+    const displayDate = new Date()
+    displayDate.setDate(displayDate.getDate() - 0); // will be used when the user decides to either go to past or future dates
     const lastWeek = new Date();
     lastWeek.setDate(lastWeek.getDate() - 2);
     navigator.geolocation.getCurrentPosition((position) => {
@@ -36,9 +46,12 @@ export const useUserData = () => {
           long: position.coords.longitude,
         },
         date: {
-          current: `${current.getFullYear()}-${
-            current.getMonth() + 1
-          }-${current.getDate()}`,
+          current: {
+            currentNumeric: `${current.getFullYear()}-${
+              current.getMonth() + 1
+            }-${current.getDate()}`,
+            currentDisplay: displayDate.toLocaleDateString('en-us', {weekday: "long", month: 'long', day: 'numeric'})
+          },
           lastWeek: `${lastWeek.getFullYear()}-${
             lastWeek.getMonth() + 1
           }-${lastWeek.getDate()}`,
