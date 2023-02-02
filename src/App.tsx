@@ -75,7 +75,7 @@ export const App = () => {
                       <Image
                         borderRadius="full"
                         boxSize="150px"
-                        src="https://bit.ly/dan-abramov"
+                        src={currentWeather?.condition.icon}
                         alt="Dan Abramov"
                       />
 
@@ -87,7 +87,7 @@ export const App = () => {
                           {currentWeather?.minTemp.minTempC}° /{" "}
                           {currentWeather?.maxTemp.maxTempC}°
                         </Text>
-                        <Text fontSize="xl">{currentWeather?.condition}</Text>
+                        <Text fontSize="xl">{currentWeather?.condition.text}</Text>
                       </Flex>
                     </Flex>
                     <Flex justify="space-evenly" p="2">
@@ -104,7 +104,7 @@ export const App = () => {
                         <CheckCircleIcon color="gray.300" />
                         <Text fontSize="md">
                           <Flex alignItems="center" columnGap='3px'>
-                            <Text fontSize='xl'>{currentWeather?.wind.windMPH}</Text>
+                            <Text fontSize='xl'>{currentWeather?.humidity}</Text>
                             <Text fontSize="xs">%</Text>
                           </Flex>
                         </Text>
@@ -113,7 +113,7 @@ export const App = () => {
                         <CheckCircleIcon color="gray.300" />
                         <Text fontSize="md">
                           <Flex alignItems="center" columnGap='3px'>
-                            <Text fontSize='xl'>{currentWeather?.wind.windMPH}</Text>
+                            <Text fontSize='xl'>{currentWeather?.rainPercentage}</Text>
                             <Text fontSize="xs">%</Text>
                           </Flex>
                         </Text>
@@ -128,12 +128,12 @@ export const App = () => {
                   <Image
                     borderRadius="full"
                     boxSize="50px"
-                    src="https://bit.ly/dan-abramov"
+                    src={currentWeather?.morningCondition}
                     alt="Dan Abramov"
                   />
                   <Text fontSize="xl">
-                    {currentWeather?.morningTemp.morningTempC}° /{" "}
-                    {currentWeather?.morningTemp.morningTempC}°
+                    {currentWeather?.morningTemp.minMorningTemp.morningTempC}° /{" "}
+                    {currentWeather?.morningTemp.maxMorningTemp.morningTempC}°
                   </Text>
                   <Text fontSize="lg">Morning</Text>
                 </Flex>
@@ -141,12 +141,12 @@ export const App = () => {
                   <Image
                     borderRadius="full"
                     boxSize="50px"
-                    src="https://bit.ly/dan-abramov"
+                    src={currentWeather?.afternoonCondition}
                     alt="Dan Abramov"
                   />
                   <Text fontSize="xl">
-                    {currentWeather?.morningTemp.morningTempC}° /{" "}
-                    {currentWeather?.morningTemp.morningTempC}°
+                    {currentWeather?.afternoonTemp.minAfternoonTemp.afternoonTempC}° /{" "}
+                    {currentWeather?.afternoonTemp.maxAfternoonTemp.afternoonTempC}°
                   </Text>
                   <Text fontSize="lg">Afternoon</Text>
                 </Flex>
@@ -154,12 +154,12 @@ export const App = () => {
                   <Image
                     borderRadius="full"
                     boxSize="50px"
-                    src="https://bit.ly/dan-abramov"
+                    src={currentWeather?.eveningCondition}
                     alt="Dan Abramov"
                   />
                   <Text fontSize="xl">
-                    {currentWeather?.morningTemp.morningTempC}° /{" "}
-                    {currentWeather?.morningTemp.morningTempC}°
+                    {currentWeather?.eveningTemp.minEveningTemp.eveningTempC}° /{" "}
+                    {currentWeather?.eveningTemp.maxEveningTemp.eveningTempC}°
                   </Text>
                   <Text fontSize="lg">Evening</Text>
                 </Flex>

@@ -30,88 +30,126 @@ export const useFutureWeatherData = () => {
           const updatedFutureWeather = forecastArr.map((day: any) => {
             return {
               maxTemp: {
-                maxTempC: day.day.maxtemp_c,
-                maxTempF: day.day.maxtemp_f,
+                maxTempC: Math.floor(day.day.maxtemp_c),
+                maxTempF: Math.floor(day.day.maxtemp_f),
               },
               minTemp: {
-                minTempC: day.day.mintemp_c,
-                minTempF: day.day.mintemp_f,
+                minTempC: Math.floor(day.day.mintemp_c),
+                minTempF: Math.floor(day.day.mintemp_f),
               },
               temp: {
-                tempC: day.day.avgtemp_c,
-                tempF: day.day.avgtemp_f,
+                tempC: Math.floor(day.day.avgtemp_c),
+                tempF: Math.floor(day.day.avgtemp_f),
               },
               wind: {
-                windMPH: day.day.maxwind_mph,
-                windKPH: day.day.maxwind_kph,
+                windMPH: Math.floor(day.day.maxwind_mph),
+                windKPH: Math.floor(day.day.maxwind_kph),
               },
-              humidity: day.day.avghumidity,
-              rainPercentage: day.hour[12].chance_of_rain,
-              condition: day.day.condition.text,
+              humidity: Math.floor(day.day.avghumidity),
+              rainPercentage: Math.floor(day.hour[12].chance_of_rain),
+              condition: {
+                text: day.day.condition.text,
+                icon: day.day.condition.icon
+              },
               uv: day.day.uv,
               morningTemp: {
-                morningTempC: day.hour[6].temp_c,
-                morningTempF: day.hour[6].temp_f,
+                minMorningTemp:{
+                  morningTempC: Math.floor(day.hour[6].temp_c),
+                  morningTempF: Math.floor(day.hour[6].temp_f),
+                },
+                maxMorningTemp:{
+                  morningTempC: Math.floor(day.hour[11].temp_c),
+                  morningTempF: Math.floor(day.hour[11].temp_f),
+                }
               },
               afternoonTemp: {
-                afternoonTempC: day.hour[12].temp_c,
-                afternoonTempF: day.hour[12].temp_f,
+                minAfternoonTemp:{
+                  afternoonTempC: Math.floor(day.hour[12].temp_c),
+                  afternoonTempF: Math.floor(day.hour[12].temp_f),
+                },
+                maxAfternoonTemp:{
+                  afternoonTempC: Math.floor(day.hour[16].temp_c),
+                  afternoonTempF: Math.floor(day.hour[16].temp_f),
+                }
               },
               eveningTemp: {
-                eveningTempC: day.hour[17].temp_c,
-                eveningTempF: day.hour[17].temp_f,
+                minEveningTemp:{
+                  eveningTempC: Math.floor(day.hour[17].temp_c),
+                  eveningTempF: Math.floor(day.hour[17].temp_f),
+                },
+                maxEveningTemp:{
+                  eveningTempC: Math.floor(day.hour[23].temp_c),
+                  eveningTempF: Math.floor(day.hour[23].temp_f),
+                }
               },
-              nightTemp: {
-                nightTempC: day.hour[21].temp_c,
-                nightTempF: day.hour[21].temp_f,
-              },
+              morningCondition: day.hour[6].condition.icon,
+              afternoonCondition: day.hour[12].condition.icon,
+              eveningCondition: day.hour[17].condition.icon,
             };
           });
           setFutureWeather(updatedFutureWeather);
           setCurrentWeather({
             maxTemp: {
-              maxTempC: response.data.forecast.forecastday[0].day.maxtemp_c,
-              maxTempF: response.data.forecast.forecastday[0].day.maxtemp_f,
+              maxTempC: Math.floor(response.data.forecast.forecastday[0].day.maxtemp_c),
+              maxTempF: Math.floor(response.data.forecast.forecastday[0].day.maxtemp_f),
             },
             minTemp: {
-              minTempC: response.data.forecast.forecastday[0].day.mintemp_c,
-              minTempF: response.data.forecast.forecastday[0].day.mintemp_f,
+              minTempC: Math.floor(response.data.forecast.forecastday[0].day.mintemp_c),
+              minTempF: Math.floor(response.data.forecast.forecastday[0].day.mintemp_f),
             },
             temp: {
-              tempC: response.data.current.temp_c,
-              tempF: response.data.current.temp_f,
+              tempC: Math.floor(response.data.current.temp_c),
+              tempF: Math.floor(response.data.current.temp_f),
             },
             wind: {
-              windMPH: response.data.current.wind_mph,
-              windKPH: response.data.current.wind_kph,
+              windMPH: Math.floor(response.data.current.wind_mph),
+              windKPH: Math.floor(response.data.current.wind_kph),
             },
-            humidity: response.data.current.humidity,
+            humidity: Math.floor(response.data.current.humidity),
             rainPercentage:
-              response.data.forecast.forecastday[0].hour[12].chance_of_rain,
-            condition: response.data.current.condition.text,
+            Math.floor(response.data.forecast.forecastday[0].hour[12].chance_of_rain),
+            condition: {
+              text: response.data.current.condition.text,
+              icon: response.data.current.condition.icon
+            },
             uv: response.data.current.uv,
             morningTemp: {
-              morningTempC:
-                response.data.forecast.forecastday[0].hour[6].temp_c,
+              minMorningTemp:{
+                morningTempC:
+                Math.floor(response.data.forecast.forecastday[0].hour[6].temp_c),
               morningTempF:
-                response.data.forecast.forecastday[0].hour[6].temp_f,
+              Math.floor(response.data.forecast.forecastday[0].hour[6].temp_f),
+              },
+              maxMorningTemp:{
+                morningTempC:
+                Math.floor(response.data.forecast.forecastday[0].hour[11].temp_c),
+              morningTempF:
+              Math.floor(response.data.forecast.forecastday[0].hour[11].temp_f),
+              }
             },
             afternoonTemp: {
-              afternoonTempC:
-                response.data.forecast.forecastday[0].hour[12].temp_c,
-              afternoonTempF:
-                response.data.forecast.forecastday[0].hour[12].temp_f,
+              minAfternoonTemp:{
+                afternoonTempC: Math.floor(response.data.forecast.forecastday[0].hour[12].temp_c),
+                afternoonTempF: Math.floor(response.data.forecast.forecastday[0].hour[12].temp_f),
+              },
+              maxAfternoonTemp:{
+                afternoonTempC: Math.floor(response.data.forecast.forecastday[0].hour[16].temp_c),
+                afternoonTempF: Math.floor(response.data.forecast.forecastday[0].hour[16].temp_f),
+              }
             },
             eveningTemp: {
-              eveningTempC:
-                response.data.forecast.forecastday[0].hour[17].temp_c,
-              eveningTempF:
-                response.data.forecast.forecastday[0].hour[17].temp_f,
+              minEveningTemp:{
+                eveningTempC: Math.floor(response.data.forecast.forecastday[0].hour[17].temp_c),
+                eveningTempF: Math.floor(response.data.forecast.forecastday[0].hour[17].temp_c),
+              },
+              maxEveningTemp:{
+                eveningTempC: Math.floor(response.data.forecast.forecastday[0].hour[23].temp_c),
+                eveningTempF: Math.floor(response.data.forecast.forecastday[0].hour[23].temp_c),
+              }
             },
-            nightTemp: {
-              nightTempC: response.data.forecast.forecastday[0].hour[21].temp_c,
-              nightTempF: response.data.forecast.forecastday[0].hour[21].temp_f,
-            },
+            morningCondition: response.data.forecast.forecastday[0].hour[6].condition.icon,
+            afternoonCondition: response.data.forecast.forecastday[0].hour[12].condition.icon,
+            eveningCondition: response.data.forecast.forecastday[0].hour[17].condition.icon,
           });
           setIsFutureSet(true)
         })

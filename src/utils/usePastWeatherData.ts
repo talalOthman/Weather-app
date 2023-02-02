@@ -23,41 +23,61 @@ export const usePastWeatherData = () => {
           const updatedPastWeather = forecastArr.map((day: any) => {
             return {
               maxTemp: {
-                maxTempC: day.day.maxtemp_c,
-                maxTempF: day.day.maxtemp_f,
+                maxTempC: Math.floor(day.day.maxtemp_c),
+                maxTempF: Math.floor(day.day.maxtemp_f),
               },
               minTemp: {
-                minTempC: day.day.mintemp_c,
-                minTempF: day.day.mintemp_f,
+                minTempC: Math.floor(day.day.mintemp_c),
+                minTempF: Math.floor(day.day.mintemp_f),
               },
               temp: {
-                tempC: day.day.avgtemp_c,
-                tempF: day.day.avgtemp_f,
+                tempC: Math.floor(day.day.avgtemp_c),
+                tempF: Math.floor(day.day.avgtemp_f),
               },
               wind: {
-                windMPH: day.day.maxwind_mph,
-                windKPH: day.day.maxwind_kph,
+                windMPH: Math.floor(day.day.maxwind_mph),
+                windKPH: Math.floor(day.day.maxwind_kph),
               },
-              humidity: day.day.avghumidity,
-              rainPercentage: day.hour[12].chance_of_rain,
-              condition: day.day.condition.text,
+              humidity: Math.floor(day.day.avghumidity),
+              rainPercentage: Math.floor(day.hour[12].chance_of_rain),
+              condition: {
+                text: day.day.condition.text,
+                icon: day.day.condition.icon
+              },
               uv: day.day.uv,
               morningTemp: {
-                morningTempC: day.hour[6].temp_c,
-                morningTempF: day.hour[6].temp_f,
+                minMorningTemp:{
+                  morningTempC: Math.floor(day.hour[6].temp_c),
+                  morningTempF: Math.floor(day.hour[6].temp_f),
+                },
+                maxMorningTemp:{
+                  morningTempC: Math.floor(day.hour[11].temp_c),
+                  morningTempF: Math.floor(day.hour[11].temp_f),
+                }
               },
               afternoonTemp: {
-                afternoonTempC: day.hour[12].temp_c,
-                afternoonTempF: day.hour[12].temp_f,
+                minAfternoonTemp:{
+                  afternoonTempC: Math.floor(day.hour[12].temp_c),
+                  afternoonTempF: Math.floor(day.hour[12].temp_f),
+                },
+                maxAfternoonTemp:{
+                  afternoonTempC: Math.floor(day.hour[16].temp_c),
+                  afternoonTempF: Math.floor(day.hour[16].temp_f),
+                }
               },
               eveningTemp: {
-                eveningTempC: day.hour[17].temp_c,
-                eveningTempF: day.hour[17].temp_f,
+                minEveningTemp:{
+                  eveningTempC: Math.floor(day.hour[17].temp_c),
+                  eveningTempF: Math.floor(day.hour[17].temp_f),
+                },
+                maxEveningTemp:{
+                  eveningTempC: Math.floor(day.hour[23].temp_c),
+                  eveningTempF: Math.floor(day.hour[23].temp_f),
+                }
               },
-              nightTemp: {
-                nightTempC: day.hour[21].temp_c,
-                nightTempF: day.hour[21].temp_f,
-              },
+              morningCondition: day.hour[6].condition.icon,
+              afternoonCondition: day.hour[12].condition.icon,
+              eveningCondition: day.hour[17].condition.icon,
             };
           });
           setPastWeather(updatedPastWeather);

@@ -18,24 +18,44 @@ export type ForecastData = {
   };
   humidity: number; // will take the average for non-current days
   rainPercentage: number;
-  condition: string;
+  condition: {
+    text: string;
+    icon: string;
+  }
   uv: number;
 
   // we can fetch current data bellow using the futureForcast api because it's provided within the array
   morningTemp: {
-    morningTempC: number;
-    morningTempF: number;
+    maxMorningTemp: {
+      morningTempC: number;
+      morningTempF: number;
+    };
+    minMorningTemp: {
+      morningTempC: number;
+      morningTempF: number;
+    };
   };
   afternoonTemp: {
-    afternoonTempC: number;
-    afternoonTempF: number;
+    maxAfternoonTemp: {
+      afternoonTempC: number;
+      afternoonTempF: number;
+    };
+    minAfternoonTemp: {
+      afternoonTempC: number;
+      afternoonTempF: number;
+    };
   };
   eveningTemp: {
-    eveningTempC: number;
-    eveningTempF: number;
+    maxEveningTemp: {
+      eveningTempC: number;
+      eveningTempF: number;
+    };
+    minEveningTemp: {
+      eveningTempC: number;
+      eveningTempF: number;
+    };
   };
-  nightTemp: {
-    nightTempC: number;
-    nightTempF: number;
-  };
+  morningCondition: string;
+  afternoonCondition: string;
+  eveningCondition: string;
 };
