@@ -107,7 +107,7 @@ export const useFutureWeatherData = () => {
             },
             humidity: Math.floor(response.data.current.humidity),
             rainPercentage:
-            Math.floor(response.data.forecast.forecastday[0].hour[12].chance_of_rain),
+            Math.floor(response.data.forecast.forecastday[0].hour[17].chance_of_rain),
             condition: {
               text: response.data.current.condition.text,
               icon: response.data.current.condition.icon

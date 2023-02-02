@@ -18,6 +18,7 @@ import {
   ChevronRightIcon,
   CheckCircleIcon,
 } from "@chakra-ui/icons";
+import { FaWind, FaUmbrella, FaSpa, FaWater } from "react-icons/fa";
 import { useState, useEffect } from "react";
 import { ColorModeSwitcher } from "./ColorModeSwitcher";
 import { Logo } from "./Logo";
@@ -25,6 +26,8 @@ import { useFutureWeatherData } from "./utils/useFutureWeatherData";
 import { usePastWeatherData } from "./utils/usePastWeatherData";
 import { ForecastData } from "./types/ForecastData";
 import { useUserData } from "./utils/useUserData";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faDroplet } from "@fortawesome/free-solid-svg-icons";
 
 export const App = () => {
   const { location, currentWeather, futureWeather, isFutureSet } =
@@ -63,7 +66,7 @@ export const App = () => {
             <Flex flexDirection="column" rowGap="3rem">
               <Flex flexDirection="column" rowGap="2rem">
                 <Flex flexDirection="column">
-                  <Text fontSize="2xl">{`${location?.region}, ${location?.country}`}</Text>
+                  <Text fontSize="3xl">{`${location?.region}, ${location?.country}`}</Text>
                   <Text fontSize="sm">
                     {userData.date.current.currentDisplay}
                   </Text>
@@ -79,41 +82,51 @@ export const App = () => {
                         alt="Dan Abramov"
                       />
 
-                      <Flex flexDirection="column" p="2">
-                        <Text fontSize="5xl">
-                          {currentWeather?.temp.tempC}°
-                        </Text>
+                      <Flex flexDirection="column" p="2" rowGap="1rem">
+                        <Flex flexDirection="column">
+                          <Text fontSize="5xl">
+                            {currentWeather?.temp.tempC}°
+                          </Text>
+                          <Text fontSize="xs" mt="-3" mr='4'>
+                            {currentWeather?.minTemp.minTempC}° /{" "}
+                            {currentWeather?.maxTemp.maxTempC}°
+                          </Text>
+                        </Flex>
                         <Text fontSize="xl">
-                          {currentWeather?.minTemp.minTempC}° /{" "}
-                          {currentWeather?.maxTemp.maxTempC}°
+                          {currentWeather?.condition.text}
                         </Text>
-                        <Text fontSize="xl">{currentWeather?.condition.text}</Text>
                       </Flex>
                     </Flex>
                     <Flex justify="space-evenly" p="2">
-                      <Flex flexDirection="column" alignItems='center'>
-                        <CheckCircleIcon color="gray.300" />
+                      <Flex flexDirection="column" alignItems="center">
+                        <FaWind color="gray.300" />
                         <Text fontSize="md">
-                          <Flex alignItems="center" columnGap='3px'>
-                            <Text fontSize='xl'>{currentWeather?.wind.windMPH}</Text>
+                          <Flex alignItems="center" columnGap="3px">
+                            <Text fontSize="xl">
+                              {currentWeather?.wind.windMPH}
+                            </Text>
                             <Text fontSize="xs">mph</Text>
                           </Flex>
                         </Text>
                       </Flex>
-                      <Flex flexDirection="column" alignItems='center'>
-                        <CheckCircleIcon color="gray.300" />
+                      <Flex flexDirection="column" alignItems="center">
+                        <FontAwesomeIcon icon={faDroplet} />
                         <Text fontSize="md">
-                          <Flex alignItems="center" columnGap='3px'>
-                            <Text fontSize='xl'>{currentWeather?.humidity}</Text>
+                          <Flex alignItems="center" columnGap="3px">
+                            <Text fontSize="xl">
+                              {currentWeather?.humidity}
+                            </Text>
                             <Text fontSize="xs">%</Text>
                           </Flex>
                         </Text>
                       </Flex>
-                      <Flex flexDirection="column" alignItems='center'>
-                        <CheckCircleIcon color="gray.300" />
+                      <Flex flexDirection="column" alignItems="center">
+                        <FaUmbrella color="gray.300" />
                         <Text fontSize="md">
-                          <Flex alignItems="center" columnGap='3px'>
-                            <Text fontSize='xl'>{currentWeather?.rainPercentage}</Text>
+                          <Flex alignItems="center" columnGap="3px">
+                            <Text fontSize="xl">
+                              {currentWeather?.rainPercentage}
+                            </Text>
                             <Text fontSize="xs">%</Text>
                           </Flex>
                         </Text>
@@ -145,8 +158,16 @@ export const App = () => {
                     alt="Dan Abramov"
                   />
                   <Text fontSize="xl">
-                    {currentWeather?.afternoonTemp.minAfternoonTemp.afternoonTempC}° /{" "}
-                    {currentWeather?.afternoonTemp.maxAfternoonTemp.afternoonTempC}°
+                    {
+                      currentWeather?.afternoonTemp.minAfternoonTemp
+                        .afternoonTempC
+                    }
+                    ° /{" "}
+                    {
+                      currentWeather?.afternoonTemp.maxAfternoonTemp
+                        .afternoonTempC
+                    }
+                    °
                   </Text>
                   <Text fontSize="lg">Afternoon</Text>
                 </Flex>
