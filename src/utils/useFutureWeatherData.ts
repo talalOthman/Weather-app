@@ -14,7 +14,7 @@ export const useFutureWeatherData = () => {
   useEffect(() => {
     if (!userData.status) {
       instance
-        .get(`${URL}/forecast.json`, {
+        .get(`${URL}/forecast.jso`, {
           params: {
             q: `${userData.geolocation.lat},${userData.geolocation.long}`,
             days: 3,
