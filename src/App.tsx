@@ -42,7 +42,7 @@ export const App = () => {
   return (
     <ChakraProvider theme={theme}>
       <Box textAlign="center" fontSize="xl">
-        <Flex height={["90vh", "100vh"]} flexDirection="column" rowGap="1rem">
+        <Flex height={["90vh", "95vh"]} flexDirection="column" rowGap="1rem">
           <Flex justify="flex-end" alignItems="center" p="2">
             <InputGroup w="10rem">
               <InputRightElement
