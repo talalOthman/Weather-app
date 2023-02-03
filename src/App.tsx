@@ -54,7 +54,7 @@ export const App = () => {
             <ColorModeSwitcher justifySelf="flex-end" />
           </Flex>
           <Flex flexDirection="column" h="100%" justify="space-around">
-            <Flex flexDirection="column" rowGap="3rem" mb={["0", "5"]}>
+            <Flex flexDirection="column" rowGap="2rem" mb={["0", "5"]}>
               <Flex flexDirection="column" rowGap="2rem">
                 <Flex flexDirection="column">
                   <Text
