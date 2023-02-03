@@ -27,7 +27,7 @@ import { usePastWeatherData } from "./utils/usePastWeatherData";
 import { ForecastData } from "./types/ForecastData";
 import { useUserData } from "./utils/useUserData";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faDroplet } from "@fortawesome/free-solid-svg-icons";
+import { faDroplet, faCloudBolt } from "@fortawesome/free-solid-svg-icons";
 
 export const App = () => {
   const { location, currentWeather, futureWeather, isFutureSet } =
@@ -37,15 +37,12 @@ export const App = () => {
 
   useEffect(() => {
     if (isFutureSet && isPastSet) {
-      // console.log(pastWeather);
-      // console.log(futureWeather);
-      // console.log(currentWeather);
     }
   }, [isFutureSet, isPastSet]);
   return (
     <ChakraProvider theme={theme}>
       <Box textAlign="center" fontSize="xl">
-        <Flex height="90vh" flexDirection="column" rowGap="1rem">
+        <Flex height={["90vh", "100vh"]} flexDirection="column" rowGap="1rem">
           <Flex justify="flex-end" alignItems="center" p="2">
             <InputGroup w="10rem">
               <InputRightElement
@@ -56,48 +53,58 @@ export const App = () => {
             </InputGroup>
             <ColorModeSwitcher justifySelf="flex-end" />
           </Flex>
-          <Flex
-            flexDirection="column"
-            // border="1px"
-            // borderColor="red"
-            h="100%"
-            justify="space-around"
-          >
-            <Flex flexDirection="column" rowGap="3rem">
+          <Flex flexDirection="column" h="100%" justify="space-around">
+            <Flex flexDirection="column" rowGap="3rem" mb={["0", "5"]}>
               <Flex flexDirection="column" rowGap="2rem">
                 <Flex flexDirection="column">
-                  <Text fontSize="3xl">{`${location?.region}, ${location?.country}`}</Text>
-                  <Text fontSize="sm">
+                  <Text
+                    fontSize={["3xl", "5xl"]}
+                  >{`${location?.region}, ${location?.country}`}</Text>
+                  <Text fontSize={["sm", "xl"]}>
                     {userData.date.current.currentDisplay}
                   </Text>
                 </Flex>
                 <Flex alignItems="center" justify="space-evenly">
-                  <ChevronLeftIcon color="gray.300" />
-                  <Flex flexDirection="column">
-                    <Flex p="5" columnGap="1rem" justify="space-between">
-                      <Image
-                        borderRadius="full"
-                        boxSize="150px"
-                        src={currentWeather?.condition.icon}
-                        alt="Dan Abramov"
-                      />
+                  <ChevronLeftIcon />
+                  <Flex
+                    flexDirection={["column", "row"]}
+                    p={["0", "3"]}
+                    ml={["0", "-10"]}
+                    
+                  >
+                    <Flex p="7" columnGap="1rem" justify="space-between">
+                      <Flex flexDirection="column" align="center">
+                        <Image
+                          boxSize={["100px", "150px"]}
+                          src={currentWeather?.condition.icon}
+                          alt="Dan Abramov"
+                        />
 
-                      <Flex flexDirection="column" p="2" rowGap="1rem">
-                        <Flex flexDirection="column">
-                          <Text fontSize="5xl">
-                            {currentWeather?.temp.tempC}°
-                          </Text>
-                          <Text fontSize="xs" mt="-3" mr='4'>
-                            {currentWeather?.minTemp.minTempC}° /{" "}
-                            {currentWeather?.maxTemp.maxTempC}°
-                          </Text>
-                        </Flex>
-                        <Text fontSize="xl">
+                        <Text fontSize={["md", "2xl"]} mt={["-4"]}>
                           {currentWeather?.condition.text}
                         </Text>
                       </Flex>
+                      <Flex
+                        flexDirection="column"
+                        pl={["0", "5"]}
+                        pr={["0", "5"]}
+                        alignItems="center"
+                        justify="center"
+                      >
+                        <Text fontSize={["6xl", "8xl"]}>
+                          {currentWeather?.temp.tempC}
+                        </Text>
+                        <Text fontSize={["xs", "md"]} mt={["-3", "-7"]}>
+                          {currentWeather?.minTemp.minTempC}° /{" "}
+                          {currentWeather?.maxTemp.maxTempC}°
+                        </Text>
+                      </Flex>
                     </Flex>
-                    <Flex justify="space-evenly" p="2">
+                    <Flex
+                      justify="space-evenly"
+                      p="2"
+                      flexDirection={["row", "column"]}
+                    >
                       <Flex flexDirection="column" alignItems="center">
                         <FaWind color="gray.300" />
                         <Text fontSize="md">
@@ -133,14 +140,14 @@ export const App = () => {
                       </Flex>
                     </Flex>
                   </Flex>
-                  <ChevronRightIcon color="gray.300" />
+                  <ChevronRightIcon />
                 </Flex>
               </Flex>
               <Flex justify="space-evenly">
                 <Flex flexDirection="column" alignItems="center">
                   <Image
                     borderRadius="full"
-                    boxSize="50px"
+                    boxSize={["50px", "100px"]}
                     src={currentWeather?.morningCondition}
                     alt="Dan Abramov"
                   />
@@ -153,7 +160,7 @@ export const App = () => {
                 <Flex flexDirection="column" alignItems="center">
                   <Image
                     borderRadius="full"
-                    boxSize="50px"
+                    boxSize={["50px", "100px"]}
                     src={currentWeather?.afternoonCondition}
                     alt="Dan Abramov"
                   />
@@ -174,7 +181,7 @@ export const App = () => {
                 <Flex flexDirection="column" alignItems="center">
                   <Image
                     borderRadius="full"
-                    boxSize="50px"
+                    boxSize={["50px", "100px"]}
                     src={currentWeather?.eveningCondition}
                     alt="Dan Abramov"
                   />
@@ -186,10 +193,12 @@ export const App = () => {
                 </Flex>
               </Flex>
             </Flex>
-            <Flex justify="center" alignItems="center" columnGap="0.5rem">
-              <Text fontSize="lg">°F</Text>
-              <Text fontSize="3xl">|</Text>
-              <Text fontSize="lg">°C</Text>
+            <Flex justify="center" alignItems="center" columnGap={["0.5rem"]}>
+              <Text fontSize={["lg", "xl"]}>°F</Text>
+              <Text fontSize={["3xl", "4xl"]} fontWeight="thin">
+                |
+              </Text>
+              <Text fontSize={["lg", "xl"]}>°C</Text>
             </Flex>
           </Flex>
         </Flex>
