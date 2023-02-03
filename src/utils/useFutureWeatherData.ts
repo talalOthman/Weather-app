@@ -11,6 +11,7 @@ export const useFutureWeatherData = () => {
   const [isFutureSet, setIsFutureSet] = useState<boolean>(false)
   const [isFutureLoading, setIsFutureLoading] = useState(false);
   const userData = useUserData();
+  const [searchLocation, setSearchLocation] = useState<any>()
 
   useEffect(() => {
     setIsFutureLoading(true)
@@ -18,7 +19,7 @@ export const useFutureWeatherData = () => {
       instance
         .get(`${URL}/forecast.json`, {
           params: {
-            q: `${userData.geolocation.lat},${userData.geolocation.long}`,
+            q: searchLocation ? searchLocation : `${userData.geolocation.lat},${userData.geolocation.long}`,
             days: 3,
           },
         })
@@ -160,7 +161,7 @@ export const useFutureWeatherData = () => {
           console.log(error);
         });
     }
-  }, [userData.status]);
+  }, [userData.status, searchLocation]);
 
-  return { location, currentWeather, futureWeather, isFutureSet, isFutureLoading};
+  return { location, currentWeather, futureWeather, isFutureSet, isFutureLoading, setSearchLocation};
 };

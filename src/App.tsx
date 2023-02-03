@@ -32,16 +32,12 @@ export const App = () => {
     futureWeather,
     isFutureSet,
     isFutureLoading,
+    setSearchLocation,
   } = useFutureWeatherData();
   const { pastWeather, isPastSet } = usePastWeatherData();
   const userData = useUserData();
   const [isFahrenheit, setIsFahrenheit] = useState<boolean>(false); // false = celsius true = fahrenheit
   const [isCelsius, setIsCelsius] = useState<boolean>(true);
-
-  useEffect(() => {
-    if (isFutureSet && isPastSet) {
-    }
-  }, [isFutureSet, isPastSet]);
 
   const changeToCelsius = () => {
     setIsFahrenheit(false);
@@ -51,6 +47,12 @@ export const App = () => {
   const changeToFahrenheit = () => {
     setIsFahrenheit(true);
     setIsCelsius(false);
+  };
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setTimeout(() => {
+      setSearchLocation(event.target.value);
+    }, 2000);
   };
   return (
     <ChakraProvider theme={theme}>
@@ -62,13 +64,17 @@ export const App = () => {
                 pointerEvents="none"
                 children={<SearchIcon color="gray.300" />}
               />
-              <Input placeholder="Search" variant="filled" />
+              <Input
+                placeholder="Search"
+                variant="filled"
+                onChange={handleChange}
+              />
             </InputGroup>
             <ColorModeSwitcher justifySelf="flex-end" />
           </Flex>
           {isFutureLoading ? (
-            <Flex h="100%" alignItems='center' justify='center'>
-              <Spinner size='lg'/>
+            <Flex h="100%" alignItems="center" justify="center">
+              <Spinner size="lg" />
             </Flex>
           ) : (
             <Flex flexDirection="column" h="100%" justify="space-around">
@@ -249,18 +255,18 @@ export const App = () => {
                   onClick={changeToFahrenheit}
                   fontSize={["lg", "xl"]}
                   style={{ textDecoration: "none" }}
-                  fontWeight={isCelsius ? 'normal' : 'extrabold'}
+                  fontWeight={isCelsius ? "normal" : "extrabold"}
                 >
                   °F
                 </Link>
-                <Text fontSize={["3xl", "4xl"]} fontWeight='medium'>
+                <Text fontSize={["3xl", "4xl"]} fontWeight="medium">
                   |
                 </Text>
                 <Link
                   onClick={changeToCelsius}
                   fontSize={["lg", "xl"]}
                   style={{ textDecoration: "none" }}
-                  fontWeight={isCelsius ? 'extrabold' : 'normal'}
+                  fontWeight={isCelsius ? "extrabold" : "normal"}
                 >
                   °C
                 </Link>
