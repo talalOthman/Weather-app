@@ -9,9 +9,11 @@ export const useFutureWeatherData = () => {
   const [futureWeather, setFutureWeather] = useState<ForecastData[]>([]);
   const [currentWeather, setCurrentWeather] = useState<ForecastData>();
   const [isFutureSet, setIsFutureSet] = useState<boolean>(false)
+  const [isFutureLoading, setIsFutureLoading] = useState(false);
   const userData = useUserData();
 
   useEffect(() => {
+    setIsFutureLoading(true)
     if (!userData.status) {
       instance
         .get(`${URL}/forecast.json`, {
@@ -140,11 +142,11 @@ export const useFutureWeatherData = () => {
             eveningTemp: {
               minEveningTemp:{
                 eveningTempC: Math.floor(response.data.forecast.forecastday[0].hour[17].temp_c),
-                eveningTempF: Math.floor(response.data.forecast.forecastday[0].hour[17].temp_c),
+                eveningTempF: Math.floor(response.data.forecast.forecastday[0].hour[17].temp_f),
               },
               maxEveningTemp:{
                 eveningTempC: Math.floor(response.data.forecast.forecastday[0].hour[23].temp_c),
-                eveningTempF: Math.floor(response.data.forecast.forecastday[0].hour[23].temp_c),
+                eveningTempF: Math.floor(response.data.forecast.forecastday[0].hour[23].temp_f),
               }
             },
             morningCondition: response.data.forecast.forecastday[0].hour[6].condition.icon,
@@ -152,6 +154,7 @@ export const useFutureWeatherData = () => {
             eveningCondition: response.data.forecast.forecastday[0].hour[17].condition.icon,
           });
           setIsFutureSet(true)
+          setIsFutureLoading(false)
         })
         .catch((error) => {
           console.log(error);
@@ -159,5 +162,5 @@ export const useFutureWeatherData = () => {
     }
   }, [userData.status]);
 
-  return { location, currentWeather, futureWeather, isFutureSet};
+  return { location, currentWeather, futureWeather, isFutureSet, isFutureLoading};
 };
