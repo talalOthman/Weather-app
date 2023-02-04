@@ -16,6 +16,7 @@ type UserData = {
 };
 
 export const useUserData = () => {
+  const [displayDate, setDisplayDate] = useState<Date>(new Date())
   const [userData, setUserData] = useState<UserData>({
     geolocation: {
       lat: 0,
@@ -33,10 +34,9 @@ export const useUserData = () => {
 
   useEffect(() => {
     const current = new Date();
-    const options = { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' };
+    const options = { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' }; 
     
-    const displayDate = new Date()
-    displayDate.setDate(displayDate.getDate() - 0); // will be used when the user decides to either go to past or future dates
+    // displayDate.setDate(displayDate.getDate() - 0); // will be used when the user decides to either go to past or future dates
     const lastWeek = new Date();
     lastWeek.setDate(lastWeek.getDate() - 2);
     navigator.geolocation.getCurrentPosition((position) => {

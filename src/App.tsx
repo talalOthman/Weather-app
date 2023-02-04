@@ -24,34 +24,74 @@ import { usePastWeatherData } from "./utils/usePastWeatherData";
 import { useUserData } from "./utils/useUserData";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDroplet } from "@fortawesome/free-solid-svg-icons";
+import { ForecastData } from "./types/ForecastData";
 
 export const App = () => {
   const {
     location,
-    currentWeather,
     futureWeather,
-    isFutureSet,
+    currentWeather,
     isFutureLoading,
-    setSearchLocation,
+    isFutureSet,
+    setSearchFutureLocation,
   } = useFutureWeatherData();
-  const { pastWeather, isPastSet } = usePastWeatherData();
+  const { pastWeather, isPastSet, isPastLoading, setSearchPastLocation } =
+    usePastWeatherData();
+  const [forecastData, setForecastData] = useState<any>([]);
+  const [day, setDay] = useState<any>(1);
+  const [displayDate, setDisplayDate] = useState<Date>(new Date());
   const userData = useUserData();
-  const [isFahrenheit, setIsFahrenheit] = useState<boolean>(false); // false = celsius true = fahrenheit
   const [isCelsius, setIsCelsius] = useState<boolean>(true);
 
+  useEffect(() => {
+    const data = [pastWeather, currentWeather, futureWeather];
+    setForecastData(data);
+    setDay(1)
+    setDisplayDate(new Date)
+  }, [isFutureSet, isPastSet]);
+
+  console.log(forecastData);
+
   const changeToCelsius = () => {
-    setIsFahrenheit(false);
     setIsCelsius(true);
   };
 
   const changeToFahrenheit = () => {
-    setIsFahrenheit(true);
     setIsCelsius(false);
+  };
+
+  const addDate = () =>{
+    displayDate.setDate(displayDate.getDate() + 1)
+    const newDate = displayDate
+    setDisplayDate(newDate)   
+  }
+
+  const subtractDate = () =>{
+    displayDate.setDate(displayDate.getDate() - 1)
+    const newDate = displayDate
+    setDisplayDate(newDate)   
+  }
+
+  const subtractDay = () => {
+    if (day > 0) {
+      const value = day - 1;
+      setDay(value);  
+      subtractDate()
+    }
+  };
+
+  const addDay = () => {
+    if (day < 2) {
+      const value = day + 1;
+      setDay(value);
+      addDate()
+    }
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTimeout(() => {
-      setSearchLocation(event.target.value);
+      setSearchFutureLocation(event.target.value);
+      setSearchPastLocation(event.target.value);
     }, 2000);
   };
   return (
@@ -72,7 +112,7 @@ export const App = () => {
             </InputGroup>
             <ColorModeSwitcher justifySelf="flex-end" />
           </Flex>
-          {isFutureLoading ? (
+          {isFutureLoading && isPastLoading ? (
             <Flex h="100%" alignItems="center" justify="center">
               <Spinner size="lg" />
             </Flex>
@@ -85,11 +125,16 @@ export const App = () => {
                       fontSize={["3xl", "5xl"]}
                     >{`${location?.region}, ${location?.country}`}</Text>
                     <Text fontSize={["sm", "xl"]}>
-                      {userData.date.current.currentDisplay}
+                      {displayDate.toLocaleDateString('en-us', {weekday: "long", month: 'long', day: 'numeric'})}
                     </Text>
                   </Flex>
                   <Flex alignItems="center" justify="space-evenly">
-                    <ChevronLeftIcon />
+                    <Link
+                      onClick={subtractDay}
+                      style={{ textDecoration: "none" }}
+                    >
+                      <ChevronLeftIcon />
+                    </Link>
                     <Flex
                       flexDirection={["column", "row"]}
                       p={["0", "3"]}
@@ -99,12 +144,12 @@ export const App = () => {
                         <Flex flexDirection="column" align="center">
                           <Image
                             boxSize={["100px", "150px"]}
-                            src={currentWeather?.condition.icon}
+                            src={forecastData[day]?.condition.icon}
                             alt="Dan Abramov"
                           />
 
-                          <Text fontSize={["md", "2xl"]} mt={["-4"]}>
-                            {currentWeather?.condition.text}
+                          <Text fontSize={["md", "2xl"]} mt={["-2"]}>
+                            {forecastData[day]?.condition.text}
                           </Text>
                         </Flex>
                         <Flex
@@ -116,17 +161,17 @@ export const App = () => {
                         >
                           <Text fontSize={["6xl", "8xl"]}>
                             {isCelsius
-                              ? currentWeather?.temp.tempC
-                              : currentWeather?.temp.tempF}
+                              ? forecastData[day]?.temp.tempC
+                              : forecastData[day]?.temp.tempF}
                           </Text>
                           <Text fontSize={["xs", "md"]} mt={["-3", "-7"]}>
                             {isCelsius
-                              ? currentWeather?.minTemp.minTempC
-                              : currentWeather?.minTemp.minTempF}
+                              ? forecastData[day]?.minTemp.minTempC
+                              : forecastData[day]?.minTemp.minTempF}
                             ° /{" "}
                             {isCelsius
-                              ? currentWeather?.maxTemp.maxTempC
-                              : currentWeather?.maxTemp.maxTempF}
+                              ? forecastData[day]?.maxTemp.maxTempC
+                              : forecastData[day]?.maxTemp.maxTempF}
                             °
                           </Text>
                         </Flex>
@@ -142,8 +187,8 @@ export const App = () => {
                             <Flex alignItems="center" columnGap="3px">
                               <Text fontSize="xl">
                                 {isCelsius
-                                  ? currentWeather?.wind.windKPH
-                                  : currentWeather?.wind.windMPH}
+                                  ? forecastData[day]?.wind.windKPH
+                                  : forecastData[day]?.wind.windMPH}
                               </Text>
                               <Text fontSize="xs">
                                 {isCelsius ? "km/h" : "mph"}
@@ -156,7 +201,7 @@ export const App = () => {
                           <Text fontSize="md">
                             <Flex alignItems="center" columnGap="3px">
                               <Text fontSize="xl">
-                                {currentWeather?.humidity}
+                                {forecastData[day]?.humidity}
                               </Text>
                               <Text fontSize="xs">%</Text>
                             </Flex>
@@ -167,7 +212,7 @@ export const App = () => {
                           <Text fontSize="md">
                             <Flex alignItems="center" columnGap="3px">
                               <Text fontSize="xl">
-                                {currentWeather?.rainPercentage}
+                                {forecastData[day]?.rainPercentage}
                               </Text>
                               <Text fontSize="xs">%</Text>
                             </Flex>
@@ -175,7 +220,9 @@ export const App = () => {
                         </Flex>
                       </Flex>
                     </Flex>
-                    <ChevronRightIcon />
+                    <Link onClick={addDay} style={{ textDecoration: "none" }}>
+                      <ChevronRightIcon />
+                    </Link>
                   </Flex>
                 </Flex>
                 <Flex justify="space-evenly">
@@ -183,20 +230,20 @@ export const App = () => {
                     <Image
                       borderRadius="full"
                       boxSize={["50px", "100px"]}
-                      src={currentWeather?.morningCondition}
+                      src={forecastData[day]?.morningCondition}
                       alt="Dan Abramov"
                     />
                     <Text fontSize="xl">
                       {isCelsius
-                        ? currentWeather?.morningTemp.minMorningTemp
+                        ? forecastData[day]?.morningTemp.minMorningTemp
                             .morningTempC
-                        : currentWeather?.morningTemp.minMorningTemp
+                        : forecastData[day]?.morningTemp.minMorningTemp
                             .morningTempF}
                       ° /{" "}
                       {isCelsius
-                        ? currentWeather?.morningTemp.maxMorningTemp
+                        ? forecastData[day]?.morningTemp.maxMorningTemp
                             .morningTempC
-                        : currentWeather?.morningTemp.maxMorningTemp
+                        : forecastData[day]?.morningTemp.maxMorningTemp
                             .morningTempF}
                       °
                     </Text>
@@ -206,20 +253,20 @@ export const App = () => {
                     <Image
                       borderRadius="full"
                       boxSize={["50px", "100px"]}
-                      src={currentWeather?.afternoonCondition}
+                      src={forecastData[day]?.afternoonCondition}
                       alt="Dan Abramov"
                     />
                     <Text fontSize="xl">
                       {isCelsius
-                        ? currentWeather?.afternoonTemp.minAfternoonTemp
+                        ? forecastData[day]?.afternoonTemp.minAfternoonTemp
                             .afternoonTempC
-                        : currentWeather?.afternoonTemp.minAfternoonTemp
+                        : forecastData[day]?.afternoonTemp.minAfternoonTemp
                             .afternoonTempF}
                       ° /{" "}
                       {isCelsius
-                        ? currentWeather?.afternoonTemp.maxAfternoonTemp
+                        ? forecastData[day]?.afternoonTemp.maxAfternoonTemp
                             .afternoonTempC
-                        : currentWeather?.afternoonTemp.maxAfternoonTemp
+                        : forecastData[day]?.afternoonTemp.maxAfternoonTemp
                             .afternoonTempF}
                       °
                     </Text>
@@ -229,20 +276,20 @@ export const App = () => {
                     <Image
                       borderRadius="full"
                       boxSize={["50px", "100px"]}
-                      src={currentWeather?.eveningCondition}
+                      src={forecastData[day]?.eveningCondition}
                       alt="Dan Abramov"
                     />
                     <Text fontSize="xl">
                       {isCelsius
-                        ? currentWeather?.eveningTemp.minEveningTemp
+                        ? forecastData[day]?.eveningTemp.minEveningTemp
                             .eveningTempC
-                        : currentWeather?.eveningTemp.minEveningTemp
+                        : forecastData[day]?.eveningTemp.minEveningTemp
                             .eveningTempF}
                       ° /{" "}
                       {isCelsius
-                        ? currentWeather?.eveningTemp.maxEveningTemp
+                        ? forecastData[day]?.eveningTemp.maxEveningTemp
                             .eveningTempC
-                        : currentWeather?.eveningTemp.maxEveningTemp
+                        : forecastData[day]?.eveningTemp.maxEveningTemp
                             .eveningTempF}
                       °
                     </Text>
