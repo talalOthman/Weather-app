@@ -50,8 +50,6 @@ export const App = () => {
     setDisplayDate(new Date)
   }, [isFutureSet, isPastSet]);
 
-  console.log(forecastData);
-
   const changeToCelsius = () => {
     setIsCelsius(true);
   };
